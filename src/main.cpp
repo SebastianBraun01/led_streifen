@@ -114,23 +114,28 @@ BLYNK_WRITE(V1) {
 
 // Ändert Farbe ===================================================================================
 BLYNK_WRITE(V2) {
-  double r = param[0].asInt() / 255.0;
-  double g = param[1].asInt() / 255.0;
-  double b = param[2].asInt() / 255.0;
+  int r = param[0].asInt();
+  int g = param[1].asInt();
+  int b = param[2].asInt();
 
-  double Cmin;
-  if(r < g && r < b) Cmin = r;
-  else if(g < r && g < b) Cmin = g;
-  else Cmin = b;
+  // Konvertiere RGB zu HUE
+  double Cmin = min(r, min(g, b));
+  double Cmax = max(r, max(g, b));
 
-  double buffer;
-  if(r > g && r > b) buffer = (g - b) / (r - Cmin);
-  else if(g > r && g > b) buffer = 2.0 + (b - r) / (g - Cmin);
-  else buffer = 4.0 + (r - g) / (b - Cmin);
+  if(Cmin == Cmax) farbe = 0;
+  else{
+    double buffer;
+    if(Cmax == r) buffer = (g - b) / (Cmax - Cmin);
+    else if(Cmax == g) buffer = 2.0 + (b - r) / (Cmax - Cmin);
+    else buffer = 4.0 + (r - g) / (Cmax - Cmin);
 
-  if(buffer < 0) buffer += 360;
-  farbe = buffer * 60;
+    buffer *= 60;
+    if(buffer < 0) buffer += 360;
+    farbe = buffer * 182;
+  }
+
   terminal.println("Farbe geändert!");
+  terminal.println(farbe);
   terminal.flush();
 
   reset = true;
