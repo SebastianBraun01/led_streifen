@@ -7,8 +7,7 @@
 
 
 // Netzwerkdaten damit sich Blynk über WLAN verbinden kann ========================================
-char auth[] = secret_auth_wand;     // Code für Wand Streifen
-// char auth[] = secret_auth_lounge    // Code für Lounge Steifen
+char auth[] = secret_auth_lounge;     // Code für Lounge Streifen
 char ssid[] = secret_ssid;
 char pass[] = secret_pass;
 
